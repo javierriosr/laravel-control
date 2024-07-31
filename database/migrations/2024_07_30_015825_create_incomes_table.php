@@ -14,14 +14,14 @@ class CreateIncomesTable extends Migration
     public function up()
     {
         Schema::create('incomes', function (Blueprint $table) {
-            $table->id();
-            $table->decimal('amount', 10, 2);
-            $table->string('description');
-            $table->unsignedBigInteger('user_id');
-            $table->date('date');
-            $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->id(); // ID auto-incremental
+            $table->foreignId('user_id') // Clave foránea para el usuario
+                  ->constrained() // Define la relación con la tabla 'users'
+                  ->onDelete('cascade'); // Elimina los ingresos si se elimina el usuario
+            $table->decimal('amount', 10, 2); // Monto con precisión de 10 y 2 decimales
+            $table->string('description'); // Descripción del ingreso
+            $table->date('date'); // Fecha del ingreso
+            $table->timestamps(); // Timestamps de creación y actualización
         });
     }
 
@@ -32,6 +32,6 @@ class CreateIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('incomes'); // Elimina la tabla si no existe
     }
 }
