@@ -4,30 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Income;
-use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
     public function index()
     {
-        $totalIncome = Income::where('user_id', auth()->id())->sum('amount');
-        $monthlyIncome = Income::select(DB::raw('SUM(amount) as total'), DB::raw('MONTH(created_at) as month'))
-                                ->where('user_id', auth()->id())
+        // Suponiendo que tengas una lógica similar para obtener los datos de ingresos
+        $totalIncome = Income::sum('amount');
+        $percentage = $totalIncome * 0.10;
+
+        $monthlyIncome = Income::selectRaw('MONTH(date) as month, SUM(amount) as total')
                                 ->groupBy('month')
                                 ->get();
 
-        $dailyIncome = Income::select(DB::raw('SUM(amount) as total'), DB::raw('DATE(created_at) as date'))
-                             ->where('user_id', auth()->id())
-                             ->groupBy('date')
-                             ->get();
-
-        $yearlyIncome = Income::select(DB::raw('SUM(amount) as total'), DB::raw('YEAR(created_at) as year'))
-                              ->where('user_id', auth()->id())
-                              ->groupBy('year')
+        $dailyIncome = Income::selectRaw('DATE(date) as date, SUM(amount) as total')
+                              ->groupBy('date')
                               ->get();
 
-        $percentage = $totalIncome * 0.10;
+        $yearlyIncome = Income::selectRaw('YEAR(date) as year, SUM(amount) as total')
+                               ->groupBy('year')
+                               ->get();
 
-        return view('analytics.index', compact('totalIncome', 'monthlyIncome', 'dailyIncome', 'yearlyIncome', 'percentage'));
+        return view('analytics.index', compact('totalIncome', 'percentage', 'monthlyIncome', 'dailyIncome', 'yearlyIncome'));
     }
 }
