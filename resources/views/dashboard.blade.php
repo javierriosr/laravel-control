@@ -58,12 +58,14 @@
                                     Add Income
                                 </a>
                             </li>
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="{{ route('incomes.index') }}">
                                     <svg class="bi"><use xlink:href="#graph-up"></use></svg>
                                     View Incomes
                                 </a>
                             </li>
+                            -->
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="{{ route('analytics') }}">
                                     <svg class="bi"><use xlink:href="#chart-bar"></use></svg>
